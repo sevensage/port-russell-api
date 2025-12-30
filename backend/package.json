@@ -1,27 +1,12 @@
 {
   "name": "port-russell-api",
   "version": "1.0.0",
-  "description": "API et dashboard du Port de Russell",
   "main": "server.js",
-  "type": "commonjs",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "start": "node server.js"
   },
   "engines": {
-    "node": ">=18"
-  },
-  "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "connect-mongo": "^5.1.0",
-    "ejs": "^3.1.9",
-    "express": "^4.19.2",
-    "express-session": "^1.17.3",
-    "mongoose": "^8.3.2",
-    "swagger-ui-express": "^5.0.0"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.0"
+    "node": "18.x"
   }
 }
 
