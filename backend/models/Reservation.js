@@ -1,37 +1,17 @@
 /**
- * @file Reservation model
- * @module models/Reservation
- */
-
-/**
- * @typedef {Object} IReservation
- * @property {number} catwayNumber - Numéro du catway réservé.
- * @property {string} clientName - Nom du client.
- * @property {string} boatName - Nom du bateau.
- * @property {Date} startDate - Date de début.
- * @property {Date} endDate - Date de fin.
+ * @file Reservation.js
+ * @description Schéma Mongoose pour les réservations.
  */
 
 const mongoose = require("mongoose");
 
-/**
- * Schéma Mongoose pour les réservations.
- * @type {mongoose.Schema<IReservation>}
- */
-const reservationSchema = new mongoose.Schema(
-  {
-    catwayNumber: { type: Number, required: true, index: true },
-    clientName: { type: String, required: true },
-    boatName: { type: String, required: true },
-    startDate: { type: Date, required: true },
-    endDate: { type: Date, required: true }
-  },
-  { timestamps: true }
-);
+const ReservationSchema = new mongoose.Schema({
+  catwayNumber: { type: Number, required: true },
+  clientName: { type: String, required: true },
+  boatName: { type: String, required: true },
+  startDate: { type: Date, required: true },
+  endDate: { type: Date, required: true }
+});
 
-/**
- * Model Reservation Mongoose.
- * @type {mongoose.Model<IReservation>}
- */
-module.exports = mongoose.model("Reservation", reservationSchema);
+module.exports = mongoose.model("Reservation", ReservationSchema);
 

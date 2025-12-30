@@ -1,65 +1,37 @@
 /**
- * @file User model definition using Mongoose.
- * @description Defines the User schema for the Port Russell API.
- * @module models/User
+ * @file User.js
+ * @description Schéma Mongoose pour les utilisateurs.
  */
 
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 /**
- * User schema definition.
- *
- * @typedef {Object} User
- * @property {String} username - Username chosen by the user.
- * @property {String} email - Unique email address.
- * @property {String} password - Hashed password stored in DB.
+ * Schéma User
  */
-const userSchema = new mongoose.Schema(
-  {
-    username: {
-      type: String,
-      required: [true, "Le nom d'utilisateur est obligatoire"],
-      minlength: [3, "Le nom d'utilisateur doit contenir au moins 3 caractères"],
-    },
-
-    email: {
-      type: String,
-      required: [true, "L'email est obligatoire"],
-      unique: true,
-      match: [/^\S+@\S+\.\S+$/, "Email invalide"],
-    },
-
-    password: {
-      type: String,
-      required: [true, "Le mot de passe est obligatoire"],
-      minlength: [6, "Le mot de passe doit contenir au moins 6 caractères"],
-    },
-  },
-  {
-    timestamps: true,
-  }
-);
+const UserSchema = new mongoose.Schema({
+  username: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true }
+});
 
 /**
- * Before saving the user, hash the password if modified.
+ * Hash du mot de passe avant sauvegarde
  */
-userSchema.pre("save", async function (next) {
+UserSchema.pre("save", async function(next) {
   if (!this.isModified("password")) return next();
   this.password = await bcrypt.hash(this.password, 10);
   next();
 });
 
 /**
- * Compare a plain password with the hashed one.
- *
- * @method
- * @param {String} password - The password to compare.
- * @returns {Promise<Boolean>} True if passwords match.
+ * Vérifie le mot de passe
+ * @param {string} passwordMotPasse
+ * @returns {Promise<boolean>}
  */
-userSchema.methods.comparePassword = function (password) {
-  return bcrypt.compare(password, this.password);
+UserSchema.methods.comparePassword = function(passwordMotPasse) {
+  return bcrypt.compare(passwordMotPasse, this.password);
 };
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model("User", UserSchema);
 

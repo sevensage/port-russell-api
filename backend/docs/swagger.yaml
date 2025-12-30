@@ -1,0 +1,278 @@
+openapi: 3.0.0
+info:
+  title: API Port de plaisance de Russell
+  description: Gestion des catways, réservations et utilisateurs
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+
+tags:
+  - name: Auth
+  - name: Users
+  - name: Catways
+  - name: Reservations
+
+paths:
+
+  /login:
+    post:
+      tags: [Auth]
+      summary: Connexion utilisateur
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "302":
+          description: Redirection vers dashboard
+
+  /logout:
+    get:
+      tags: [Auth]
+      summary: Déconnexion
+      responses:
+        "302":
+          description: Redirection page accueil
+
+  /users:
+    get:
+      tags: [Users]
+      summary: Liste des utilisateurs
+      responses:
+        "200":
+          description: OK
+
+    post:
+      tags: [Users]
+      summary: Créer un utilisateur
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        "201":
+          description: Utilisateur créé
+
+  /users/{email}:
+    get:
+      tags: [Users]
+      summary: Détails d’un utilisateur
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+
+    put:
+      tags: [Users]
+      summary: Modifier un utilisateur
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        "200":
+          description: Modifié
+
+    delete:
+      tags: [Users]
+      summary: Supprimer un utilisateur
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Supprimé
+
+  /catways:
+    get:
+      tags: [Catways]
+      summary: Liste des catways
+      responses:
+        "200":
+          description: OK
+
+    post:
+      tags: [Catways]
+      summary: Créer un catway
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Catway"
+      responses:
+        "201":
+          description: Créé
+
+  /catways/{id}:
+    get:
+      tags: [Catways]
+      summary: Détails d’un catway
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+
+    put:
+      tags: [Catways]
+      summary: Modifier l’état d’un catway
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                catwayState:
+                  type: string
+      responses:
+        "200":
+          description: Modifié
+
+    delete:
+      tags: [Catways]
+      summary: Supprimer un catway
+      responses:
+        "204":
+          description: Supprimé
+
+  /catways/{id}/reservations:
+    get:
+      tags: [Reservations]
+      summary: Liste des réservations d’un catway
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+
+    post:
+      tags: [Reservations]
+      summary: Créer une réservation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Reservation"
+      responses:
+        "201":
+          description: Créée
+
+  /catways/{id}/reservations/{reservationId}:
+    get:
+      tags: [Reservations]
+      summary: Détails d’une réservation
+      parameters:
+        - name: reservationId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+
+    put:
+      tags: [Reservations]
+      summary: Modifier une réservation
+      parameters:
+        - name: reservationId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Modifiée
+
+    delete:
+      tags: [Reservations]
+      summary: Supprimer une réservation
+      responses:
+        "204":
+          description: Supprimée
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+
+    Catway:
+      type: object
+      properties:
+        catwayNumber:
+          type: integer
+        catwayType:
+          type: string
+          enum: [long, short]
+        catwayState:
+          type: string
+
+    Reservation:
+      type: object
+      properties:
+        clientName:
+          type: string
+        boatName:
+          type: string
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+
