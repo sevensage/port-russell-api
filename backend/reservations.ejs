@@ -1,0 +1,44 @@
+<h1>📅 Gestion des réservations</h1>
+
+<h2>➕ Nouvelle réservation</h2>
+
+<form action="/reservations" method="POST">
+  <label>Catway</label>
+  <input type="number" name="catwayNumber" required>
+
+  <label>Bateau</label>
+  <input type="text" name="boatName" required>
+
+  <label>Début</label>
+  <input type="date" name="startDate" required>
+
+  <label>Fin</label>
+  <input type="date" name="endDate" required>
+
+  <button type="submit">Créer</button>
+</form>
+
+<hr>
+
+<h2>📋 Réservations existantes</h2>
+
+<ul>
+  <% reservations.forEach(r => { %>
+    <li>
+      Catway <%= r.catwayNumber %> —
+      <%= r.boatName %>
+      (<%= r.startDate.toISOString().slice(0,10) %> →
+       <%= r.endDate.toISOString().slice(0,10) %>)
+
+      <form action="/reservations/<%= r._id %>/delete" method="POST" style="display:inline;">
+        <button>🗑️</button>
+      </form>
+
+      <a href="/reservations/<%= r._id %>/edit">✏️</a>
+    </li>
+  <% }) %>
+</ul>
+
+<br>
+<a href="/dashboard">⬅ Retour dashboard</a>
+

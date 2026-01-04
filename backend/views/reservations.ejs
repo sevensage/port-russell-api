@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestion des réservations</title>
+  <style>
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background: #f2f2f2; }
+    form { margin: 0; display: inline; }
+  </style>
+</head>
+<body>
+
+<h1>Gestion des réservations</h1>
+
+<% if (error) { %>
+  <p style="color:red"><%= error %></p>
+<% } %>
+
+<h2><%= editReservation ? "Modifier une réservation" : "Créer une réservation" %></h2>
+
+<form method="POST"
+  action="<%= editReservation
+    ? '/dashboard/reservations/edit/' + editReservation._id
+    : '/dashboard/reservations' %>">
+
+  <label>Catway</label><br>
+  <select name="catwayNumber" required>
+    <% catways.forEach(c => { %>
+      <option value="<%= c.catwayNumber %>"
+        <%= editReservation && editReservation.catwayNumber === c.catwayNumber ? 'selected' : '' %>>
+        <%= c.catwayNumber %>
+      </option>
+    <% }) %>
+  </select><br><br>
+
+  <label>Client</label><br>
+  <input name="clientName" required value="<%= editReservation ? editReservation.clientName : '' %>"><br><br>
+
+  <label>Bateau</label><br>
+  <input name="boatName" required value="<%= editReservation ? editReservation.boatName : '' %>"><br><br>
+
+  <label>Date début</label><br>
+  <input type="date" name="startDate" required
+    value="<%= editReservation ? editReservation.startDate.toISOString().split('T')[0] : '' %>"><br><br>
+
+  <label>Date fin</label><br>
+  <input type="date" name="endDate" required
+    value="<%= editReservation ? editReservation.endDate.toISOString().split('T')[0] : '' %>"><br><br>
+
+  <button type="submit"><%= editReservation ? "Modifier" : "Créer" %></button>
+</form>
+
+<hr>
+
+<h2>Liste des réservations</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Catway</th>
+      <th>Client</th>
+      <th>Bateau</th>
+      <th>Début</th>
+      <th>Fin</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% reservations.forEach(r => { %>
+    <tr>
+      <td><%= r.catwayNumber %></td>
+      <td><%= r.clientName %></td>
+      <td><%= r.boatName %></td>
+      <td><%= r.startDate.toLocaleDateString() %></td>
+      <td><%= r.endDate.toLocaleDateString() %></td>
+      <td>
+        <a href="/dashboard/reservations/edit/<%= r._id %>">✏️ Modifier</a>
+        |
+        <form method="POST" action="/dashboard/reservations/delete/<%= r._id %>">
+          <button type="submit">🗑️ Supprimer</button>
+        </form>
+      </td>
+    </tr>
+  <% }) %>
+  </tbody>
+</table>
+
+<p><a href="/dashboard">⬅ Retour au dashboard</a></p>
+
+</body>
+</html>
+

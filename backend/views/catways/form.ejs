@@ -1,0 +1,38 @@
+<%~
+/**
+ * @file views/catways/form.ejs
+ * @description Formulaire de création / modification d’un catway
+ * @access Private
+ * @usedby GET /catways/new
+ */
+%>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Catway</title>
+  <link rel="stylesheet" href="/public/style.css">
+</head>
+<body>
+
+<h1>Ajouter un catway</h1>
+
+<form method="POST" action="/catways">
+  <label>Numéro</label>
+  <input type="number" name="catwayNumber" required />
+
+  <label>Type</label>
+  <input type="text" name="type" required />
+
+  <label>État</label>
+  <input type="text" name="state" />
+
+  <button type="submit">Enregistrer</button>
+</form>
+
+<a href="/catways">⬅ Retour</a>
+
+</body>
+</html>
+

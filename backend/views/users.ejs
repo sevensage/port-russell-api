@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestion des utilisateurs</title>
+  <style>
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background: #f2f2f2; }
+    form { margin: 0; display: inline; }
+  </style>
+</head>
+<body>
+
+<h1>Gestion des utilisateurs</h1>
+
+<% if (error) { %>
+  <p style="color:red"><%= error %></p>
+<% } %>
+
+<h2><%= editUser ? "Modifier un utilisateur" : "Créer un utilisateur" %></h2>
+
+<form method="POST"
+  action="<%= editUser
+    ? '/dashboard/users/edit/' + editUser.email
+    : '/dashboard/users' %>">
+
+  <label>Username</label><br>
+  <input name="username" required value="<%= editUser ? editUser.username : '' %>"><br><br>
+
+  <label>Email</label><br>
+  <input type="email"
+         name="email"
+         <%= editUser ? 'readonly' : '' %>
+         required
+         value="<%= editUser ? editUser.email : '' %>"><br><br>
+
+  <label>Mot de passe</label><br>
+  <input type="password" name="password" <%= editUser ? '' : 'required' %>><br>
+  <% if (editUser) { %>
+    <small>Laisser vide pour conserver le mot de passe actuel</small>
+  <% } %>
+  <br><br>
+
+  <button type="submit"><%= editUser ? "Modifier" : "Créer" %></button>
+</form>
+
+<hr>
+
+<h2>Liste des utilisateurs</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Username</th>
+      <th>Email</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% users.forEach(u => { %>
+    <tr>
+      <td><%= u.username %></td>
+      <td><%= u.email %></td>
+      <td>
+        <a href="/dashboard/users/edit/<%= u.email %>">✏️ Modifier</a>
+        |
+        <form method="POST" action="/dashboard/users/delete/<%= u.email %>">
+          <button type="submit">🗑️ Supprimer</button>
+        </form>
+      </td>
+    </tr>
+  <% }) %>
+  </tbody>
+</table>
+
+<p><a href="/dashboard">⬅ Retour au dashboard</a></p>
+
+</body>
+</html>
+

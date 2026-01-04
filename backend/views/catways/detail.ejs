@@ -1,0 +1,33 @@
+<%~
+/**
+ * @file views/catways/detail.ejs
+ * @description Détails d’un catway
+ * @access Private
+ * @usedby GET /catways/:id
+ */
+%>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Détail Catway</title>
+  <link rel="stylesheet" href="/public/style.css">
+</head>
+<body>
+
+<h1>Détail du catway</h1>
+
+<p><strong>Numéro :</strong> <%= catway.catwayNumber %></p>
+<p><strong>Type :</strong> <%= catway.type %></p>
+<p><strong>État :</strong> <%= catway.state %></p>
+
+<form method="POST" action="/catways/<%= catway.catwayNumber %>?_method=DELETE">
+  <button type="submit">❌ Supprimer</button>
+</form>
+
+<a href="/catways">⬅ Retour</a>
+
+</body>
+</html>
+

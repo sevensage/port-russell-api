@@ -1,0 +1,34 @@
+<%~
+/**
+ * @file views/users/list.ejs
+ * @description Liste des utilisateurs
+ * @access Admin
+ * @usedby GET /users
+ */
+%>
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Utilisateurs</title>
+  <link rel="stylesheet" href="/public/style.css">
+</head>
+<body>
+
+<h1>Utilisateurs</h1>
+
+<a href="/dashboard">⬅ Retour</a>
+
+<ul>
+  <% users.forEach(user => { %>
+    <li>
+      <%= user.name %> – <%= user.email %>
+      <a href="/users/<%= user._id %>">Voir</a>
+    </li>
+  <% }) %>
+</ul>
+
+</body>
+</html>
+

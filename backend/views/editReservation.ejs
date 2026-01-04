@@ -1,0 +1,16 @@
+<h1>Modifier réservation</h1>
+
+<form
+  method="POST"
+  action="/catways/<%= reservation.catwayNumber %>/reservations/<%= reservation._id %>"
+>
+  <input name="clientName" value="<%= reservation.clientName %>" required />
+  <input name="boatName" value="<%= reservation.boatName %>" required />
+  <input type="date" name="startDate" value="<%= reservation.startDate.toISOString().substring(0,10) %>" required />
+  <input type="date" name="endDate" value="<%= reservation.endDate.toISOString().substring(0,10) %>" required />
+
+  <button type="submit">Enregistrer</button>
+</form>
+
+<a href="/catways/<%= reservation.catwayNumber %>/reservations">⬅ Retour</a>
+

@@ -1,0 +1,31 @@
+<%~
+/**
+ * @file views/reservations/form.ejs
+ * @description Formulaire de réservation
+ * @access Private
+ * @usedby GET /reservations/new
+ */
+%>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Nouvelle réservation</title>
+  <link rel="stylesheet" href="/public/style.css">
+</head>
+<body>
+
+<h1>Créer une réservation</h1>
+
+<form method="POST" action="/reservations">
+  <input type="text" name="clientName" placeholder="Nom du client" required />
+  <input type="number" name="catwayNumber" placeholder="Numéro catway" required />
+  <input type="date" name="startDate" required />
+  <input type="date" name="endDate" required />
+  <button type="submit">Créer</button>
+</form>
+
+</body>
+</html>
+

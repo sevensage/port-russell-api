@@ -1,0 +1,8 @@
+<h1>Réservation</h1>
+
+<p>Bateau : <%= reservation.boatName %></p>
+
+<form method="POST" action="/reservations/<%= reservation._id %>?_method=DELETE">
+  <button>Supprimer</button>
+</form>
+

@@ -1,0 +1,46 @@
+<%~
+/**
+ * @file views/catways/list.ejs
+ * @description Page listant tous les catways (CRUD – READ)
+ * @access Private
+ * @usedby GET /catways
+ */
+%>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Liste des catways</title>
+  <link rel="stylesheet" href="/public/style.css">
+</head>
+<body>
+
+<h1>Gestion des catways</h1>
+
+<a href="/dashboard">⬅ Retour dashboard</a>
+<a href="/catways/new">➕ Ajouter un catway</a>
+
+<table>
+  <tr>
+    <th>Numéro</th>
+    <th>Type</th>
+    <th>État</th>
+    <th>Actions</th>
+  </tr>
+
+  <% catways.forEach(catway => { %>
+    <tr>
+      <td><%= catway.catwayNumber %></td>
+      <td><%= catway.type %></td>
+      <td><%= catway.state %></td>
+      <td>
+        <a href="/catways/<%= catway.catwayNumber %>">Voir</a>
+      </td>
+    </tr>
+  <% }) %>
+</table>
+
+</body>
+</html>
+

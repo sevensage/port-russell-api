@@ -1,0 +1,35 @@
+<%~
+/**
+ * @file views/reservations/list.ejs
+ * @description Liste des réservations
+ * @access Private
+ * @usedby GET /reservations
+ */
+%>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Réservations</title>
+  <link rel="stylesheet" href="/public/style.css">
+</head>
+<body>
+
+<h1>Réservations</h1>
+
+<a href="/dashboard">⬅ Dashboard</a>
+<a href="/reservations/new">➕ Nouvelle réservation</a>
+
+<ul>
+  <% reservations.forEach(r => { %>
+    <li>
+      Catway <%= r.catwayNumber %> – <%= r.clientName %>
+      <a href="/reservations/<%= r._id %>">Voir</a>
+    </li>
+  <% }) %>
+</ul>
+
+</body>
+</html>
+

@@ -1,0 +1,33 @@
+<h1>📊 Tableau de bord</h1>
+
+<p>
+👤 <%= user.name %> (<%= user.email %>)<br>
+📅 <%= new Date().toLocaleDateString() %>
+</p>
+
+<nav>
+  <a href="/dashboard/catways">Gestion des catways</a>
+  <a href="/dashboard/reservations">Gestion des réservations</a>
+  <a href="/dashboard/users">Gestion des utilisateurs</a>
+  <a href="/api-docs">📄 API</a>
+  <a href="/logout">🚪 Déconnexion</a>
+</nav>
+
+<h2>Réservations</h2>
+
+<% if (reservations.length === 0) { %>
+  <p>Aucune réservation enregistrée.</p>
+<% } else { %>
+  <ul>
+    <% reservations.forEach(r => { %>
+      <li>
+        Catway <%= r.catwayNumber %> —
+        <strong><%= r.boatName %></strong>
+        (<%= r.clientName %>)
+        du <%= r.startDate.toLocaleDateString() %>
+        au <%= r.endDate.toLocaleDateString() %>
+      </li>
+    <% }) %>
+  </ul>
+<% } %>
+

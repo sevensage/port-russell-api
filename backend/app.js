@@ -5,10 +5,17 @@
  * du Port de plaisance de Russell.
  */
 
+require("dotenv").config();
+
 const express = require("express");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const path = require("path");
+
+/* =======================
+   MODELS
+   ======================= */
+const Reservation = require("./models/Reservation");
 
 /* =======================
    Swagger
@@ -19,17 +26,14 @@ const swaggerSpec = require("./swagger");
 const app = express();
 
 /* ===========================================================
-   CONNEXION À MONGODB (ENV)
+   CONNEXION À MONGODB
    =========================================================== */
 
-/**
- * Connexion à MongoDB Atlas (Render / production)
- */
 mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => console.log("✅ MongoDB Atlas connected"))
   .catch((err) =>
-    console.error("❌ MongoDB connection error:", err)
+    console.error("❌ MongoDB connection error:", err.message)
   );
 
 /* ===========================================================
@@ -39,31 +43,31 @@ mongoose
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-/**
- * Gestion des sessions utilisateurs
- */
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      secure: false,
-      maxAge: 1000 * 60 * 60, // 1 heure
-    },
-  })
-);
-
 /* ===========================================================
    CONFIGURATION EJS & FICHIERS STATIQUES
    =========================================================== */
 
+app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "../frontend/views"));
+
+app.use(express.static(path.join(__dirname, "public")));
+
+/* ===========================================================
+   SESSIONS
+   =========================================================== */
 
 app.use(
-  "/public",
-  express.static(path.join(__dirname, "../frontend/public"))
+  session({
+    name: "port-russell-session",
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: false, // true seulement en HTTPS
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60, // 1 heure
+    },
+  })
 );
 
 /* ===========================================================
@@ -71,30 +75,39 @@ app.use(
    =========================================================== */
 
 /**
- * @route GET /
- * @description Page d'accueil (connexion)
+ * Page de connexion
  */
 app.get("/", (req, res) => {
   res.render("login", { error: null });
 });
 
 /**
- * @route GET /dashboard
- * @description Tableau de bord
+ * Dashboard — CHARGE LES VRAIES RÉSERVATIONS
  */
-app.get("/dashboard", (req, res) => {
+app.get("/dashboard", async (req, res) => {
   if (!req.session.user) {
     return res.redirect("/");
   }
 
-  res.render("dashboard", {
-    user: req.session.user,
-  });
+  try {
+    const reservations = await Reservation.find().sort({ startDate: 1 });
+
+    res.render("dashboard", {
+      user: req.session.user,
+      reservations,
+    });
+  } catch (err) {
+    console.error("❌ Erreur chargement reservations:", err);
+    res.render("dashboard", {
+      user: req.session.user,
+      reservations: [],
+      error: "Erreur lors du chargement des réservations",
+    });
+  }
 });
 
 /**
- * @route GET /logout
- * @description Déconnexion
+ * Déconnexion
  */
 app.get("/logout", (req, res) => {
   req.session.destroy(() => {
